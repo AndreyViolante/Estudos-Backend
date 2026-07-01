@@ -1,0 +1,59 @@
+services:
+  # Banco de DESENVOLVIMENTO - usado pela API quando ela roda "de verdade".
+  # Tem volume nomeado: os dados devem persistir entre reinicializações.
+  db_dev:
+    image: postgres:16-alpine
+    container_name: produtos_db_dev
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: produtos_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - produtos_dev_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d produtos_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+
+  # Banco de TESTES - usado exclusivamente pela suíte do Pytest.
+  # Sem volume nomeado: os dados são descartáveis e cada execução de teste
+  # já cuida de zerar as tabelas (ver fixture `client` em conftest.py).
+  db_test:
+    image: postgres:16-alpine
+    container_name: produtos_db_test
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: produtos_test_db
+    ports:
+      - "5433:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d produtos_test_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+
+  # API - opcional para rodar a aplicação inteira via Docker.
+  # Para os testes, apenas o db_test precisa estar de pé (a API roda local
+  # com uvicorn ou é acionada diretamente pelo TestClient).
+  api:
+    build: .
+    container_name: produtos_api
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@db_dev:5432/produtos_db
+    ports:
+      - "8000:8000"
+    depends_on:
+      db_dev:
+        condition: service_healthy
+
+volumes:
+  produtos_dev_data:
