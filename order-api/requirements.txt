@@ -1,6 +1,7 @@
 fastapi==0.111.0
 uvicorn[standard]==0.30.0
 motor==3.4.0
+pymongo<4.9
 aio-pika==9.4.1
 aiokafka==0.10.0
 pytest==8.1.1

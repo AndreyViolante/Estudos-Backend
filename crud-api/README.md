@@ -93,8 +93,8 @@ Os testes usam SQLite em memória, **sem necessidade de Docker ou PostgreSQL**.
 
 ### 1. Instalar dependências de teste
 
-Os testes usam SQLite em memória, portanto **não é necessário PostgreSQL** para rodá-los.
-Use o arquivo `requirements-test.txt` que omite o driver PostgreSQL:
+Os testes usam SQLite em memória, portanto **não é necessário um servidor PostgreSQL** para rodá-los.
+Use o arquivo `requirements-test.txt`, uma versão mais enxuta de `requirements.txt`:
 
 ```bash
 pip install -r requirements-test.txt
