@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Acervo</title>
+</head>
+<body>
+    <h1>Acervo</h1>
+    <a href="{% url 'novo' %}">+ Novo Livro</a>
+    
+    <form method="get">
+        <input type="text" name="nome" placeholder="Pesquisar por nome">
+        <select name="tipo">
+            <option value="">Todos os tipos</option>
+            <option value="digital">Digital</option>
+            <option value="fisico">Físico</option>
+        </select>
+        <select name="categoria">
+            <option value="">Todas as categorias</option>
+            <option value="000">000</option>
+            <option value="100">100</option>
+            <option value="200">200</option>
+            <option value="300">300</option>
+            <option value="400">400</option>
+            <option value="500">500</option>
+            <option value="600">600</option>
+            <option value="700">700</option>
+            <option value="800">800</option>
+            <option value="900">900</option>
+        </select>
+        <button>Pesquisar</button>
+    </form>
+    
+    <p>{{ livros.count }} livros</p>
+    
+    {% for livro in livros %}
+        <div>
+            <h3>{{ livro.titulo }}</h3>
+            <p>{{ livro.autor }} ({{ livro.ano }})</p>
+            <p>{{ livro.get_tipo_acervo_display }} - {{ livro.get_categoria_display }}</p>
+        </div>
+    {% empty %}
+        <p>Nenhum livro encontrado.</p>
+    {% endfor %}
+</body>
+</html>
