@@ -7,7 +7,7 @@ Sistema de gerenciamento de acervo de biblioteca com filtros avançados.
 ```bash
 cd biblioteca
 python -m venv venv
-venv\Scriptsctivate
+venv\Scripts\activate
 pip install -r requirements.txt
 python manage.py migrate
 python manage.py runserver
